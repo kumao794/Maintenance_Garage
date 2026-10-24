@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>愛車管理</title>
+
+<style>
+:root{
+    --primary:#1976d2;
+    --bg:#f5f7fa;
+    --card:#ffffff;
+    --danger:#e53935;
+    --warning:#f9a825;
+    --success:#43a047;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:var(--bg);
+    color:#333;
+}
+
+.app{
+    max-width:430px;
+    margin:0 auto;
+    min-height:100vh;
+    background:#fff;
+}
+
+.header{
+    background:var(--primary);
+    color:#fff;
+    padding:18px;
+    text-align:center;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.screen{
+    display:none;
+    padding:16px;
+}
+
+.screen.active{
+    display:block;
+}
+
+.card{
+    background:var(--card);
+    border-radius:14px;
+    padding:16px;
+    margin-bottom:14px;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+.card-title{
+    font-size:16px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.big-value{
+    font-size:28px;
+    color:var(--primary);
+    font-weight:bold;
+}
+
+label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:600;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    padding:12px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    margin-bottom:14px;
+    font-size:16px;
+}
+
+button{
+    width:100%;
+    border:none;
+    border-radius:10px;
+    padding:14px;
+    font-size:16px;
+    color:#fff;
+    background:var(--primary);
+}
+
+.btn-green{
+    background:var(--success);
+}
+
+.alert{
+    padding:12px;
+    color:#fff;
+    border-radius:10px;
+    margin-bottom:10px;
+}
+
+.red{background:var(--danger);}
+.yellow{background:var(--warning);}
+.green{background:var(--success);}
+
+.history-item{
+    padding:12px 0;
+    border-bottom:1px solid #eee;
+}
+
+.bottom-space{
+    height:80px;
+}
+
+.nav{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    max-width:430px;
+    margin:auto;
+    display:flex;
+    background:#fff;
+    border-top:1px solid #ddd;
+}
+
+.nav button{
+    background:white;
+    color:#333;
+    border-radius:0;
+    font-size:13px;
+    padding:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <div class="header">
+        🚗 愛車管理
+    </div>
+
+    <!-- ホーム -->
+    <div id="home" class="screen active">
+
+        <div class="card">
+            <div class="card-title">現在走行距離</div>
+            <div class="big-value">125,000 km</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">平均燃費</div>
+            <div class="big-value">15.2 km/L</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">交換予定</div>
+
+            <div class="alert red">
+                🔴 エンジンオイル<br>
+                残り 500km
+            </div>
+
+            <div class="alert yellow">
+                🟡 バッテリー<br>
+                残り 2ヶ月
+            </div>
+
+            <div class="alert green">
+                🟢 タイヤ<br>
+                残り 9,000km
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 給油 -->
+    <div id="fuel" class="screen">
+
+        <div class="card">
+            <div class="card-title">⛽ 給油記録</div>
+
+            <label>日付</label>
+            <input type="date">
+
+            <label>走行距離(km)</label>
+            <input type="number" placeholder="125000">
+
+            <label>給油量(L)</label>
+            <input type="number" placeholder="42.3">
+
+            <label>金額(円)</label>
+            <input type="number" placeholder="7100">
+
+            <button>保存</button>
+        </div>
+
+        <div class="card">
+            <div class="card-title">前回燃費</div>
+            <div class="big-value">15.37 km/L</div>
+        </div>
+
+    </div>
+
+    <!-- 整備 -->
+    <div id="maintenance" class="screen">
+
+        <div class="card">
+
+            <div class="card-title">🔧 部品交換</div>
+
+            <label>部品名</label>
+
+            <select>
+                <option>エンジンオイル</option>
+                <option>オイルフィルター</option>
+                <option>タイヤ</option>
+                <option>バッテリー</option>
+            </select>
+
+            <button class="btn-green">
+                ＋ 部品追加
+            </button>
+
+            <br><br>
+
+            <label
