@@ -1,240 +1,240 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>愛車管理</title>
-
-<style>
-:root{
-    --primary:#1976d2;
-    --bg:#f5f7fa;
-    --card:#ffffff;
-    --danger:#e53935;
-    --warning:#f9a825;
-    --success:#43a047;
-}
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    background:var(--bg);
-    color:#333;
-}
-
-.app{
-    max-width:430px;
-    margin:0 auto;
-    min-height:100vh;
-    background:#fff;
-}
-
-.header{
-    background:var(--primary);
-    color:#fff;
-    padding:18px;
-    text-align:center;
-    font-size:22px;
-    font-weight:bold;
-}
-
-.screen{
-    display:none;
-    padding:16px;
-}
-
-.screen.active{
-    display:block;
-}
-
-.card{
-    background:var(--card);
-    border-radius:14px;
-    padding:16px;
-    margin-bottom:14px;
-    box-shadow:0 2px 10px rgba(0,0,0,.08);
-}
-
-.card-title{
-    font-size:16px;
-    font-weight:bold;
-    margin-bottom:10px;
-}
-
-.big-value{
-    font-size:28px;
-    color:var(--primary);
-    font-weight:bold;
-}
-
-label{
-    display:block;
-    margin-bottom:6px;
-    font-weight:600;
-}
-
-input,
-select,
-textarea{
-    width:100%;
-    padding:12px;
-    border:1px solid #ddd;
-    border-radius:10px;
-    margin-bottom:14px;
-    font-size:16px;
-}
-
-button{
-    width:100%;
-    border:none;
-    border-radius:10px;
-    padding:14px;
-    font-size:16px;
-    color:#fff;
-    background:var(--primary);
-}
-
-.btn-green{
-    background:var(--success);
-}
-
-.alert{
-    padding:12px;
-    color:#fff;
-    border-radius:10px;
-    margin-bottom:10px;
-}
-
-.red{background:var(--danger);}
-.yellow{background:var(--warning);}
-.green{background:var(--success);}
-
-.history-item{
-    padding:12px 0;
-    border-bottom:1px solid #eee;
-}
-
-.bottom-space{
-    height:80px;
-}
-
-.nav{
-    position:fixed;
-    left:0;
-    right:0;
-    bottom:0;
-    max-width:430px;
-    margin:auto;
-    display:flex;
-    background:#fff;
-    border-top:1px solid #ddd;
-}
-
-.nav button{
-    background:white;
-    color:#333;
-    border-radius:0;
-    font-size:13px;
-    padding:10px;
-}
-</style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#1d4ed8">
+    <title>Maintenance Garage</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
+    <div class="app-shell">
+        <header class="header">
+            <h1 class="header-title">🚗 Maintenance Garage</h1>
+        </header>
 
-<div class="app">
+        <main>
+            <section id="home-screen" class="screen active">
+                <div class="card">
+                    <div class="card-title">現在走行距離</div>
+                    <div class="metric-box">
+                        <span class="big-value" id="home-current-distance">0 km</span>
+                    </div>
+                </div>
 
-    <div class="header">
-        🚗 愛車管理
-    </div>
+                <div class="card">
+                    <div class="card-title">最新燃費</div>
+                    <div class="metric-box">
+                        <span class="big-value" id="home-latest-fuel">未記録</span>
+                    </div>
+                </div>
 
-    <!-- ホーム -->
-    <div id="home" class="screen active">
+                <div class="card">
+                    <div class="card-title">集計</div>
+                    <div class="summary-grid">
+                        <div class="mini-stat">
+                            <span class="label">給油件数</span>
+                            <span class="value" id="home-fuel-count">0 件</span>
+                        </div>
+                        <div class="mini-stat">
+                            <span class="label">整備件数</span>
+                            <span class="value" id="home-maintenance-count">0 件</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-        <div class="card">
-            <div class="card-title">現在走行距離</div>
-            <div class="big-value">125,000 km</div>
-        </div>
+            <section id="fuel-screen" class="screen">
+                <div class="card">
+                    <div class="card-title">⛽ 給油記録</div>
 
-        <div class="card">
-            <div class="card-title">平均燃費</div>
-            <div class="big-value">15.2 km/L</div>
-        </div>
+                    <form id="fuel-form">
+                        <div id="fuel-form-alert" class="alert success" hidden></div>
 
-        <div class="card">
-            <div class="card-title">交換予定</div>
+                        <div class="form-group">
+                            <label for="fuel-date">日付</label>
+                            <input id="fuel-date" name="date" type="date" required>
+                        </div>
 
-            <div class="alert red">
-                🔴 エンジンオイル<br>
-                残り 500km
+                        <div class="form-group">
+                            <label for="fuel-odometer">オドメーター(km)</label>
+                            <input id="fuel-odometer" name="odometer" type="number" min="0" step="1" placeholder="125000" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fuel-amount">給油量(L)</label>
+                            <input id="fuel-amount" name="fuelAmount" type="number" min="0" step="0.1" placeholder="42.3" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fuel-price">金額(円)</label>
+                            <input id="fuel-price" name="price" type="number" min="0" step="1" placeholder="7100" required>
+                        </div>
+
+                        <div class="inline-actions">
+                            <button type="submit" class="primary-btn">保存</button>
+                            <button type="button" id="cancel-fuel-edit-btn" class="secondary-btn" hidden>キャンセル</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section id="maintenance-screen" class="screen">
+                <div class="card">
+                    <div class="card-title">🔧 整備記録</div>
+
+                    <form id="maintenance-form">
+                        <div id="maintenance-form-alert" class="alert success" hidden></div>
+
+                        <div class="form-group">
+                            <label for="part-name-select">部品名</label>
+                            <select id="part-name-select" name="partName"></select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="new-part-name">部品追加</label>
+                            <div class="inline-actions">
+                                <input id="new-part-name" type="text" placeholder="例: ブレーキパッド">
+                                <button type="button" id="add-part-btn" class="secondary-btn">追加</button>
+                            </div>
+                            <div id="part-add-alert" class="alert success" hidden></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="maintenance-date">交換日</label>
+                            <input id="maintenance-date" name="date" type="date" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="maintenance-odometer">交換時走行距離(km)</label>
+                            <input id="maintenance-odometer" name="odometer" type="number" min="0" step="1" placeholder="125000" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="maintenance-cost">費用(円)</label>
+                            <input id="maintenance-cost" name="cost" type="number" min="0" step="1" placeholder="12000" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="maintenance-memo">メモ</label>
+                            <textarea id="maintenance-memo" name="memo" placeholder="交換内容や注意点をメモできます"></textarea>
+                        </div>
+
+                        <div class="inline-actions">
+                            <button type="submit" class="success-btn">保存</button>
+                            <button type="button" id="cancel-maintenance-edit-btn" class="secondary-btn" hidden>キャンセル</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section id="history-screen" class="screen">
+                <div class="history-subnav" aria-label="履歴カテゴリ">
+                    <button type="button" class="history-subtab active" data-history-tab="fuel">給油</button>
+                    <button type="button" class="history-subtab" data-history-tab="maintenance">整備</button>
+                    <button type="button" class="history-subtab" data-history-tab="delete">削除</button>
+                    <button type="button" class="history-subtab" data-history-tab="manage">管理</button>
+                </div>
+
+                <div class="history-panel" data-history-panel="fuel">
+                    <div class="card">
+                        <div class="card-title">📋 給油履歴</div>
+                        <div class="history-toolbar">
+                            <select id="fuel-year-filter" class="compact-select">
+                                <option value="all">全期間</option>
+                            </select>
+                            <select id="fuel-month-filter" class="compact-select">
+                                <option value="all">全月</option>
+                            </select>
+                        </div>
+                        <div class="inline-actions history-actions">
+                            <button type="button" id="export-fuel-csv-btn" class="secondary-btn">給油CSV出力</button>
+                        </div>
+                        <div id="fuel-history-list" class="history-list"></div>
+                    </div>
+                </div>
+
+                <div class="history-panel" data-history-panel="maintenance">
+                    <div class="card">
+                        <div class="card-title">🛠 整備履歴</div>
+                        <div class="history-toolbar">
+                            <select id="maintenance-year-filter" class="compact-select">
+                                <option value="all">全期間</option>
+                            </select>
+                            <select id="maintenance-month-filter" class="compact-select">
+                                <option value="all">全月</option>
+                            </select>
+                        </div>
+                        <div class="inline-actions history-actions">
+                            <button type="button" id="export-maintenance-csv-btn" class="secondary-btn">整備CSV出力</button>
+                        </div>
+                        <div id="maintenance-history-list" class="maintenance-list"></div>
+                    </div>
+                </div>
+
+                <div class="history-panel" data-history-panel="delete">
+                    <div class="card">
+                        <div class="card-title">🗑 削除履歴</div>
+                        <div id="delete-history-list" class="history-list"></div>
+                    </div>
+                </div>
+
+                <div class="history-panel" data-history-panel="manage">
+                    <div class="card">
+                        <div class="card-title">📤 インポート</div>
+                        <div class="inline-actions history-actions">
+                            <button type="button" id="import-csv-btn" class="secondary-btn">CSVインポート</button>
+                        </div>
+                        <input id="import-csv-input" type="file" accept=".csv,text/csv" hidden>
+                        <div id="import-status" class="alert success" hidden></div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-title">🧹 データ管理</div>
+                        <button type="button" id="clear-all-data-btn" class="danger-btn">全データをクリア</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <div id="delete-confirm-modal" class="modal hidden" aria-modal="true" role="dialog">
+            <div class="modal-card">
+                <div class="modal-title">削除確認</div>
+                <p id="delete-confirm-message">このデータを削除しますか？</p>
+                <div class="inline-actions">
+                    <button type="button" id="confirm-delete-btn" class="danger-btn">削除</button>
+                    <button type="button" id="cancel-delete-btn" class="secondary-btn">キャンセル</button>
+                </div>
             </div>
-
-            <div class="alert yellow">
-                🟡 バッテリー<br>
-                残り 2ヶ月
-            </div>
-
-            <div class="alert green">
-                🟢 タイヤ<br>
-                残り 9,000km
-            </div>
         </div>
 
-    </div>
-
-    <!-- 給油 -->
-    <div id="fuel" class="screen">
-
-        <div class="card">
-            <div class="card-title">⛽ 給油記録</div>
-
-            <label>日付</label>
-            <input type="date">
-
-            <label>走行距離(km)</label>
-            <input type="number" placeholder="125000">
-
-            <label>給油量(L)</label>
-            <input type="number" placeholder="42.3">
-
-            <label>金額(円)</label>
-            <input type="number" placeholder="7100">
-
-            <button>保存</button>
-        </div>
-
-        <div class="card">
-            <div class="card-title">前回燃費</div>
-            <div class="big-value">15.37 km/L</div>
-        </div>
-
-    </div>
-
-    <!-- 整備 -->
-    <div id="maintenance" class="screen">
-
-        <div class="card">
-
-            <div class="card-title">🔧 部品交換</div>
-
-            <label>部品名</label>
-
-            <select>
-                <option>エンジンオイル</option>
-                <option>オイルフィルター</option>
-                <option>タイヤ</option>
-                <option>バッテリー</option>
-            </select>
-
-            <button class="btn-green">
-                ＋ 部品追加
+        <nav class="nav" aria-label="メニュー">
+            <button class="nav-button active" data-screen="home" type="button">
+                <span class="icon">🏠</span>
+                <span>ホーム</span>
             </button>
+            <button class="nav-button" data-screen="fuel" type="button">
+                <span class="icon">⛽</span>
+                <span>給油</span>
+            </button>
+            <button class="nav-button" data-screen="maintenance" type="button">
+                <span class="icon">🔧</span>
+                <span>整備</span>
+            </button>
+            <button class="nav-button" data-screen="history" type="button">
+                <span class="icon">📋</span>
+                <span>履歴</span>
+            </button>
+        </nav>
+    </div>
 
-            <br><br>
-
-            <label
+    <script defer src="constants.js"></script>
+    <script defer src="utils.js"></script>
+    <script defer src="storage.js"></script>
+    <script defer src="ui.js"></script>
+    <script defer src="fuel.js"></script>
+    <script defer src="maintenance.js"></script>
+    <script defer src="history.js"></script>
+    <script defer src="app.js"></script>
+</body>
+</html>
